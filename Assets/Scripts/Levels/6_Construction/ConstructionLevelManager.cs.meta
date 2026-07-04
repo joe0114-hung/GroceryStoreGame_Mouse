@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 3f60d7c43805dbe43958a06b0caa81e8
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - database: {fileID: 11400000, guid: 5fc07f012cc980f439be64f557784ec5, type: 2}
+  - orderUI: {instanceID: 0}
+  - basketSpawner: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
