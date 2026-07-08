@@ -78,6 +78,16 @@ public class PalmManager : MonoBehaviour
             {
                 effectsManager.PlayDropEffects(bottle, box);
             }
-        }
+
+            // 延遲 1.5 秒後，才執行切換關卡 (秒數可根據你的特效長度調整)
+            Invoke(nameof(GoToNextStage), 2.0f);
+
+        }   
+    }
+
+    // 在 HandleDragging() 的外面，新增這個小方法給 Invoke 呼叫
+    private void GoToNextStage()
+    {
+        GameFlowController.Instance.ChangeState(GameFlowController.GameState.WaitForStart);
     }
 }
