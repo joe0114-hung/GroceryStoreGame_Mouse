@@ -28,6 +28,10 @@ public class DwellInteractor : MonoBehaviour
     private PointerEventData pointerData;
     private readonly List<RaycastResult> raycastResults = new();
 
+    [Header("UI 反饋")]
+    [Tooltip("綁定畫面上跟隨游標的進度條圓圈 Image (填滿類型需為 Filled)")]
+    [SerializeField] private UnityEngine.UI.Image progressRing;
+
     private void Awake()
     {
         Debug.Log("[Dwell] 懸停系統已啟動");
@@ -68,6 +72,11 @@ public class DwellInteractor : MonoBehaviour
             timer = 0f;          // 只要換目標，計時器就歸零
             hasSelected = false; // 重置觸發狀態
 
+            if (progressRing != null)
+            {
+                progressRing.fillAmount = 0f;
+            }
+
             if (currentTarget != null)
                 Debug.Log($"[Hover] 游標進入：{currentTarget.name}");
         }
@@ -78,6 +87,11 @@ public class DwellInteractor : MonoBehaviour
 
         // 6. 累積停留時間
         timer += Time.deltaTime;
+
+        if (progressRing != null)
+        {
+            progressRing.fillAmount = timer / dwellTime;
+        }
 
         // 7. 達到指定時間，正式觸發選取事件！
         if (timer >= dwellTime)
