@@ -21,6 +21,9 @@ EditorBuildSettings:
     path: Assets/Scenes/WaitStartScene.unity
     guid: 74aca9706cc43514ca40c4882a68c5d0
   - enabled: 1
+    path: Assets/Scenes/StoryIntroScene.unity
+    guid: 869c873c57884d5592480986b4c2da40
+  - enabled: 1
     path: Assets/Scenes/CountdownScene.unity
     guid: c0fdfddcc2bb9cd45a14f4ae490d53e8
   m_configObjects:

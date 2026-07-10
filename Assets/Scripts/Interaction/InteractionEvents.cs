@@ -8,6 +8,12 @@ using UnityEngine;
 /// </summary>
 public static class InteractionEvents
 {
+    // 當虛擬游標進入可互動物件時觸發
+    public static Action<GameObject> OnHoverEnter;
+
+    // 當虛擬游標離開可互動物件時觸發
+    public static Action<GameObject> OnHoverExit;
+
     // 當有物件被游標「確定選取」時觸發，並傳遞被選取的 GameObject
     public static Action<GameObject> OnSelect;
 }

@@ -68,6 +68,7 @@ public class DwellInteractor : MonoBehaviour
         // 4. 判斷游標是不是「換目標」了 (包含移到空白處)
         if (newTarget != currentTarget)
         {
+            GameObject previousTarget = currentTarget;
             currentTarget = newTarget;
             timer = 0f;          // 只要換目標，計時器就歸零
             hasSelected = false; // 重置觸發狀態
@@ -77,8 +78,16 @@ public class DwellInteractor : MonoBehaviour
                 progressRing.fillAmount = 0f;
             }
 
+            if (previousTarget != null)
+            {
+                InteractionEvents.OnHoverExit?.Invoke(previousTarget);
+            }
+
             if (currentTarget != null)
+            {
                 Debug.Log($"[Hover] 游標進入：{currentTarget.name}");
+                InteractionEvents.OnHoverEnter?.Invoke(currentTarget);
+            }
         }
 
         // 5. 如果現在沒有指著任何可互動物件，或已經觸發過了，就不繼續計時

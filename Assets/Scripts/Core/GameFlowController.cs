@@ -12,11 +12,12 @@ public class GameFlowController : MonoBehaviour
     // 定義遊戲的所有狀態
     public enum GameState
     {
-        None,           // 初始空狀態
-        Tutorial,       // 教學階段
-        WaitForStart,   // 舉手開始階段
-        Countdown,      // 倒數階段
-        PlayingLevel    // 關卡場景階段
+        None = 0,           // 初始空狀態
+        Tutorial = 1,       // 教學階段
+        WaitForStart = 2,   // 舉手開始階段
+        Countdown = 3,      // 倒數階段
+        PlayingLevel = 4,   // 關卡場景階段
+        StoryIntro = 5      // 故事開場階段
     }
 
     public static GameFlowController Instance;
@@ -25,6 +26,7 @@ public class GameFlowController : MonoBehaviour
     public GameState currentState = GameState.None;
 
     [Header("各階段場景名稱設定")]
+    public string storyIntroSceneName = "StoryIntroScene";
     public string tutorialSceneName = "Controller_Palm";
     public string waitStartSceneName = "WaitStartScene"; // 請替換成你實際的場景名稱
     public string countdownSceneName = "CountdownScene"; // 請替換成你實際的場景名稱
@@ -48,8 +50,8 @@ public class GameFlowController : MonoBehaviour
 
     private void Start()
     {
-        // 遊戲一啟動，自動進入「教學」狀態
-        ChangeState(GameState.Tutorial);
+        // 遊戲一啟動，先進入故事開場
+        ChangeState(GameState.StoryIntro);
     }
 
     /// <summary>
@@ -72,6 +74,7 @@ public class GameFlowController : MonoBehaviour
     {
         switch (state)
         {
+            case GameState.StoryIntro: return storyIntroSceneName;
             case GameState.Tutorial: return tutorialSceneName;
             case GameState.WaitForStart: return waitStartSceneName;
             case GameState.Countdown: return countdownSceneName;
