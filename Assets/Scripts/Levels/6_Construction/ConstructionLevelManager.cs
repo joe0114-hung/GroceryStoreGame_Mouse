@@ -121,7 +121,7 @@ public class ConstructionLevelManager : MonoBehaviour
                 Debug.Log("🎉 [LevelManager] 恭喜！ 5題全部答對了！ 關卡結束");
                 if (StampManager.Instance != null)
                 {
-                    StampManager.Instance.RegisterLevelCompleted(6);
+                    StampManager.Instance.QueuePendingStamp(6);
                 }
                 if (GameFlowController.Instance != null)
                 {

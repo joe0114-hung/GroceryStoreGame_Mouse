@@ -12,6 +12,7 @@ public class StampManager : MonoBehaviour
     [Header("State")]
     [SerializeField] private int completedLevelCount;
     [SerializeField] private int completedStampIndex = 6;
+    [SerializeField] private int pendingStampIndex;
 
     private readonly bool[] completedStampSlots = new bool[6];
     private GameObject[] progressEmptyIcons;
@@ -19,6 +20,7 @@ public class StampManager : MonoBehaviour
 
     public int CompletedCount => completedLevelCount;
     public int CompletedStampIndex => completedStampIndex;
+    public bool HasPendingStamp => pendingStampIndex > 0;
 
     private void Awake()
     {
@@ -80,6 +82,23 @@ public class StampManager : MonoBehaviour
     public void RegisterLevelCompleted(int stampIndex)
     {
         TryRegisterCompletedStamp(stampIndex);
+    }
+
+    public void QueuePendingStamp(int stampIndex)
+    {
+        pendingStampIndex = Mathf.Clamp(stampIndex, 1, 6);
+    }
+
+    public bool TryConsumePendingStamp(out int stampIndex)
+    {
+        stampIndex = pendingStampIndex;
+        if (pendingStampIndex <= 0)
+        {
+            return false;
+        }
+
+        pendingStampIndex = 0;
+        return true;
     }
 
     public bool HasStamp(int stampIndex)

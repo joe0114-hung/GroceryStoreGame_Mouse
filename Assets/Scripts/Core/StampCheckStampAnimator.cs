@@ -89,6 +89,8 @@ public class StampCheckStampAnimator : MonoBehaviour
         {
             stampPaperController.SyncFromManager();
         }
+
+        TryPlayQueuedStamp();
     }
 
     public void PlayStamp1() => PlayStamp(1);
@@ -230,5 +232,23 @@ public class StampCheckStampAnimator : MonoBehaviour
         }
 
         sfxSource.PlayOneShot(crowdCheerSound);
+    }
+
+    private void TryPlayQueuedStamp()
+    {
+        if (StampManager.Instance == null)
+        {
+            return;
+        }
+
+        if (!StampManager.Instance.TryConsumePendingStamp(out int stampIndex))
+        {
+            return;
+        }
+
+        if (stampIndex >= 1 && stampIndex <= 6)
+        {
+            PlayStamp(stampIndex);
+        }
     }
 }
