@@ -17,7 +17,8 @@ public class GameFlowController : MonoBehaviour
         WaitForStart = 2,   // 舉手開始階段
         Countdown = 3,      // 倒數階段
         PlayingLevel = 4,   // 關卡場景階段
-        StoryIntro = 5      // 故事開場階段
+        StoryIntro = 5,     // 故事開場階段
+        StampCheck = 6      // 印章確認階段
     }
 
     public static GameFlowController Instance;
@@ -27,6 +28,7 @@ public class GameFlowController : MonoBehaviour
 
     [Header("各階段場景名稱設定")]
     public string storyIntroSceneName = "StoryIntroScene";
+    public string stampCheckSceneName = "StampCheckScene";
     public string tutorialSceneName = "Controller_Palm";
     public string waitStartSceneName = "WaitStartScene"; // 請替換成你實際的場景名稱
     public string countdownSceneName = "CountdownScene"; // 請替換成你實際的場景名稱
@@ -75,6 +77,7 @@ public class GameFlowController : MonoBehaviour
         switch (state)
         {
             case GameState.StoryIntro: return storyIntroSceneName;
+            case GameState.StampCheck: return stampCheckSceneName;
             case GameState.Tutorial: return tutorialSceneName;
             case GameState.WaitForStart: return waitStartSceneName;
             case GameState.Countdown: return countdownSceneName;

@@ -81,7 +81,7 @@ public class StoryIntroController : MonoBehaviour
 
         if (characterAnimator == null)
         {
-            characterAnimator = GetComponent<StoryIntroCharacterAnimator>();
+            characterAnimator = FindObjectOfType<StoryIntroCharacterAnimator>();
         }
 
     }
@@ -98,7 +98,7 @@ public class StoryIntroController : MonoBehaviour
 
     private void HandleSelect(GameObject selectedObject)
     {
-        if (selectedObject != nextButton)
+        if (!IsNextButtonSelection(selectedObject))
         {
             return;
         }
@@ -120,6 +120,21 @@ public class StoryIntroController : MonoBehaviour
         }
 
         pageTurnRoutine = StartCoroutine(AdvanceAfterPageTurn());
+    }
+
+    private bool IsNextButtonSelection(GameObject selectedObject)
+    {
+        if (selectedObject == null || nextButton == null)
+        {
+            return false;
+        }
+
+        if (selectedObject == nextButton)
+        {
+            return true;
+        }
+
+        return selectedObject.transform.IsChildOf(nextButton.transform);
     }
 
     private void Start()

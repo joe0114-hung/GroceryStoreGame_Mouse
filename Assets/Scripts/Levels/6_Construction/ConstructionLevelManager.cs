@@ -27,6 +27,8 @@ public class ConstructionLevelManager : MonoBehaviour
     [SerializeField] private GiftBoxController giftBox; 
     [Tooltip("負責比對答案")]
     [SerializeField] private AnswerChecker answerChecker;
+    [Tooltip("全部答完後要切換到的下一個狀態")]
+    [SerializeField] private GameFlowController.GameState nextState = GameFlowController.GameState.StampCheck;
 
     // 內部狀態追蹤
     private List<QuestionData> currentRoundQuestions = new List<QuestionData>(); // 存放這回合抽出的 5 題
@@ -117,6 +119,14 @@ public class ConstructionLevelManager : MonoBehaviour
             else
             {
                 Debug.Log("🎉 [LevelManager] 恭喜！ 5題全部答對了！ 關卡結束");
+                if (StampManager.Instance != null)
+                {
+                    StampManager.Instance.RegisterLevelCompleted(6);
+                }
+                if (GameFlowController.Instance != null)
+                {
+                    GameFlowController.Instance.ChangeState(nextState);
+                }
                 // 這裡未來可以呼叫結算畫面、播放成功音效，或回到標題
             }
         }

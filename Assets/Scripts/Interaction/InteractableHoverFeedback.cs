@@ -10,6 +10,7 @@ public class InteractableHoverFeedback : MonoBehaviour
     [SerializeField] private Color normalColor = new Color(1f, 0.86f, 0.48f, 1f);
     [SerializeField] private Color hoverColor = new Color(1f, 0.95f, 0.62f, 1f);
     [SerializeField] private float hoverScale = 1.08f;
+    [SerializeField] private bool tintGraphicOnHover = true;
 
     private Vector3 originalScale;
 
@@ -46,7 +47,7 @@ public class InteractableHoverFeedback : MonoBehaviour
 
         transform.localScale = originalScale * hoverScale;
 
-        if (targetGraphic != null)
+        if (tintGraphicOnHover && targetGraphic != null)
         {
             targetGraphic.color = hoverColor;
         }
@@ -66,7 +67,7 @@ public class InteractableHoverFeedback : MonoBehaviour
     {
         transform.localScale = originalScale;
 
-        if (targetGraphic != null)
+        if (tintGraphicOnHover && targetGraphic != null)
         {
             targetGraphic.color = normalColor;
         }
