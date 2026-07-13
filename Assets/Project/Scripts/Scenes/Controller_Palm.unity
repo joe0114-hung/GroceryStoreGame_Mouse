@@ -816,8 +816,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 4.16}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 450, y: -120}
-  m_SizeDelta: {x: 1062, y: 600}
+  m_AnchoredPosition: {x: 454.5605, y: -71}
+  m_SizeDelta: {x: 307.4584, y: 746.704}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &406656006
 MonoBehaviour:
@@ -1339,6 +1339,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Project.UI.DwellCursor
   dwellDuration: 2
+  cooldownDuration: 1.5
   cursorVisual: {fileID: 1819939674}
   progressRingImage: {fileID: 396176270}
 --- !u!1 &1185773573

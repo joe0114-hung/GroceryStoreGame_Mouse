@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 /// <summary>
 /// 腳本功能：負責紙箱 (GiftBox) 的核心邏輯。管理 4 個格子的狀態、放水果、拿水果以及對答案前的資料彙整。
 /// 掛載對象：場景中的 GiftBox 主物件。
+/// 優化邏輯：空手空格不觸發；手滿且與格子水果相同不觸發；手滿且與格子水果不同則允許直接「覆蓋取代」。
 /// </summary>
 public class GiftBoxController : MonoBehaviour
 {
@@ -18,6 +19,14 @@ public class GiftBoxController : MonoBehaviour
     // 紀錄目前游標正指著哪一個格子 (-1 代表沒有指著任何格子)
     private int hoverSlotIndex = -1;
 
+    // 抓取自己身上的互動標籤，用來動態開關進度條
+    private InteractableUI myInteractableTag;
+
+    private void Awake()
+    {
+        myInteractableTag = GetComponent<InteractableUI>();
+    }
+
     private void OnEnable()
     {
         InteractionEvents.OnSelect += OnSelect;
@@ -26,6 +35,50 @@ public class GiftBoxController : MonoBehaviour
     private void OnDisable()
     {
         InteractionEvents.OnSelect -= OnSelect;
+    }
+
+    private void Update()
+    {
+        if (CursorHandController.Instance == null || myInteractableTag == null) return;
+
+        // 如果游標沒有對準任何一格，直接關閉讀條
+        if (hoverSlotIndex == -1 || hoverSlotIndex >= slotFruits.Length)
+        {
+            myInteractableTag.enabled = false;
+            return;
+        }
+
+        GameObject holding = CursorHandController.Instance.GetHolding();
+        bool isHandEmpty = (holding == null);
+        bool isSlotEmpty = (slotFruits[hoverSlotIndex] == null);
+
+        if (isHandEmpty && isSlotEmpty)
+        {
+            // 【防呆 1】手是空的，格子也是空的 ➔ 關閉進度條
+            myInteractableTag.enabled = false;
+        }
+        else if (!isHandEmpty && !isSlotEmpty)
+        {
+            // 🌟【關鍵改動】手上有東西，格子也有東西 ➔ 比較兩者是否為同一種水果
+            string holdingName = holding.name.Replace("(Clone)", "");
+            string slotFruitName = slotFruits[hoverSlotIndex].name.Replace("(Clone)", "");
+
+            if (holdingName == slotFruitName)
+            {
+                // 【防呆 2】手上拿蘋果，格子裡也是蘋果 ➔ 關閉進度條（不重複觸發）
+                myInteractableTag.enabled = false;
+            }
+            else
+            {
+                // 【取代情境】手上拿葡萄，格子裡是蘋果 ➔ 允許開啟進度條！（走取代流程）
+                myInteractableTag.enabled = true;
+            }
+        }
+        else
+        {
+            // 手空格滿（要拿取）或 手滿格空（要放置） ➔ 正常開啟進度條
+            myInteractableTag.enabled = true;
+        }
     }
 
     /// <summary>
@@ -55,14 +108,18 @@ public class GiftBoxController : MonoBehaviour
                 
                 Debug.Log($"[GiftBox] 成功從 Slot {hoverSlotIndex} 拿出水果！");
             }
-            else
-            {
-                Debug.Log("[GiftBox] 操作無效：手上沒東西，且格子也是空的");
-            }
             return; 
         }
 
         // 情境 B：手上有拿水果 ➔ 嘗試放進格子裡
+        // 🌟【關鍵改動】如果格子內原本就有水果（因為 Update 已過濾掉相同水果，此處必為不同水果），先將其銷毀
+        if (slotFruits[hoverSlotIndex] != null)
+        {
+            Debug.Log($"[GiftBox] 偵測到不同水果，正在自動替換 Slot {hoverSlotIndex} 的舊水果...");
+            TakeFruit(hoverSlotIndex); // 呼叫原本寫好的拿取銷毀方法，將格子清空
+        }
+
+        // 此時格子已被清空，可以完美放入新水果
         bool isPlaced = PutFruit(holding);
         
         // 如果放置成功，才把游標手上的水果實體清空
@@ -134,7 +191,7 @@ public class GiftBoxController : MonoBehaviour
     }
 
     /// <summary>
-    /// 更新目前游標懸停的格子索引 (由 SlotDetector 呼叫)
+    /// 更新目前游標懸停的格子索引 (由 SlotDetector 呼交)
     /// </summary>
     public void SetHoverSlot(int index)
     {
@@ -192,6 +249,4 @@ public class GiftBoxController : MonoBehaviour
         }
         Debug.Log("[GiftBox] 紙箱已全面清空！");
     }
-
-
 }

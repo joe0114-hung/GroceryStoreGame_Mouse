@@ -1026,6 +1026,7 @@ GameObject:
   - component: {fileID: 878736494}
   - component: {fileID: 878736493}
   - component: {fileID: 878736492}
+  - component: {fileID: 878736495}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -1050,8 +1051,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -835, y: 270}
-  m_SizeDelta: {x: 200, y: 700}
+  m_AnchoredPosition: {x: -835, y: 123.00006}
+  m_SizeDelta: {x: 200, y: 948.6644}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &878736492
 MonoBehaviour:
@@ -1122,7 +1123,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.9, g: 0.9, b: 0.9, a: 0.68235296}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1147,6 +1148,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 878736490}
   m_CullTransparentMesh: 1
+--- !u!114 &878736495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 878736490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc50e5ada858e20468e939898470f701, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BreathingUI
+  glowImage: {fileID: 0}
+  breatheSpeed: 1.5
+  minAlpha: 0.2
+  maxAlpha: 0.8
+  targetToScale: {fileID: 878736491}
+  maxScale: 1.05
 --- !u!1 &1157788328
 GameObject:
   m_ObjectHideFlags: 0
@@ -1318,7 +1337,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u9AD8\n\u8209\n\u96D9\n\u624B\n\u63D0\n\u4EA4"
+  m_text: "\u5B8C\n\u6210\n\u5F8C\n\u96D9\n\u624B\n\u9AD8\n\u8209\n\u9001\n\u51FA"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 682a04dbe34c63548ac5e36dfba8c0cc, type: 2}
   m_sharedMaterial: {fileID: 5994937673702216767, guid: 682a04dbe34c63548ac5e36dfba8c0cc, type: 2}
@@ -1327,8 +1346,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1384,7 +1403,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 0, z: 13.725464, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -1783,7 +1802,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -356.41, y: 132}
+  m_AnchoredPosition: {x: -370, y: 120}
   m_SizeDelta: {x: 712.8129, y: 675.4444}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1758475950

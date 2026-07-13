@@ -72,6 +72,33 @@ namespace Project.UI
         {
             if (_isPaused || cursorVisual == null) return; 
 
+            //卡頓突波過濾器 (DeltaTime Spike Filter)
+            // 如果畫面卡頓超過 0.1 秒，我們強制只算 0.1 秒，絕對不允許瞬間灌滿進度條！
+            float safeDeltaTime = Time.unscaledDeltaTime;
+            if (safeDeltaTime > 0.1f) safeDeltaTime = 0.1f;
+
+            // 偵測到「舉手提交」動作時，強制閉眼！
+            OAKInputReceiver oakBrain = OAKInputReceiver.Instance;
+            if (oakBrain != null && oakBrain.currentMode == OAKInputReceiver.InputMode.OAKCamera_相機偵測模式)
+            {
+                // 如果雙手都舉到畫面上半部 (> 60%)，代表準備提交了
+                if (oakBrain.LeftHandScreenPos.y > Screen.height * 0.6f && 
+                    oakBrain.RightHandScreenPos.y > Screen.height * 0.6f)
+                {
+                    // 強制中斷目前的懸停進度
+                    if (_currentTarget != null) InteractionEvents.OnHoverExit?.Invoke(_currentTarget);
+                    _currentTarget = null;
+                    ResetDwellUI();
+                    
+                    // 游標圖案還是要跟著手移動，但不准執行下方的射線點擊！
+                    Vector2 pos = GetPointerScreenPosition();
+                    RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                        cursorVisual.parent as RectTransform, pos, null, out Vector2 safePos);
+                    cursorVisual.anchoredPosition = safePos;
+                    return; 
+                }
+            }
+
             Vector2 pointerPosition = GetPointerScreenPosition();
 
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
@@ -81,22 +108,19 @@ namespace Project.UI
             //  檢查是否在「冷卻防護」狀態中
             if (_cooldownTimer > 0f)
             {
-                _cooldownTimer -= Time.unscaledDeltaTime; // 倒數冷卻時間
+                _cooldownTimer -= safeDeltaTime; // 改用安全的流失時間
                 
-                // 強制脫離目標並隱藏進度條
                 if (_currentTarget != null)
                 {
                     InteractionEvents.OnHoverExit?.Invoke(_currentTarget);
                     _currentTarget = null;
                 }
                 ResetDwellUI();
-                
-                return; //  只要還在冷卻，就直接 Return，不發射線也不讀條！
+                return; 
             }
 
             GameObject hoveredObj = GetTargetUnderPointer(pointerPosition);
 
-            // 當游標切換目標時的處理
             if (hoveredObj != _currentTarget)
             {
                 if (_currentTarget != null) InteractionEvents.OnHoverExit?.Invoke(_currentTarget);
@@ -108,10 +132,9 @@ namespace Project.UI
                 if (_currentTarget != null) InteractionEvents.OnHoverEnter?.Invoke(_currentTarget);
             }
 
-            // 如果有目標，開始讀條
             if (_currentTarget != null)
             {
-                _hoverTimer += Time.unscaledDeltaTime;
+                _hoverTimer += safeDeltaTime; // 改用安全的流失時間
                 
                 if (progressRingImage != null)
                 {
@@ -120,7 +143,6 @@ namespace Project.UI
                     progressRingImage.fillAmount = Mathf.Clamp01(_hoverTimer / dwellDuration);
                 }
 
-                // 達到觸發時間
                 if (_hoverTimer >= dwellDuration)
                 {
                     GameObject triggered = _currentTarget;
@@ -128,7 +150,6 @@ namespace Project.UI
                     _currentTarget = null;
                     ResetDwellUI();
 
-                    // 執行觸發事件
                     Button btn = triggered.GetComponent<Button>();
                     if (btn != null && btn.interactable) btn.onClick.Invoke();
 
@@ -139,7 +160,6 @@ namespace Project.UI
                         InteractionEvents.OnSelect?.Invoke(triggered);
                     }
 
-                    //  成功觸發後，立刻啟動冷卻防護罩！
                     _cooldownTimer = cooldownDuration;
                 }
             }

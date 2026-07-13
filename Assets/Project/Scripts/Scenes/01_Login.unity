@@ -861,7 +861,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61a55640429d7c748a7acca8cd51140b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Project.Core.GameManager
-  globalInputMode: 0
+  globalInputMode: 1
   loginSceneName: 01_Login
   openingStorySceneName: 02_OpeningStory
   coreGameSceneName: CoreGameScene
@@ -5293,6 +5293,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Project.UI.DwellCursor
   dwellDuration: 2
+  cooldownDuration: 1.5
   cursorVisual: {fileID: 659827158}
   progressRingImage: {fileID: 1846276766}
 --- !u!114 &1402161884

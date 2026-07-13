@@ -1,6 +1,7 @@
 using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,6 +12,7 @@ using UnityEngine.UI;
 ///          2. 加入執行緒鎖定（lock），防止多執行緒資料衝突閃退。
 ///          3. 修正 LoadImage 記憶體洩漏與 GC 卡頓問題。
 ///          4. 新增 UV 鏡像翻轉魔法，完美對齊全域骨架座標！
+///          5. 🌟 自動化指揮：誕生時命令 Python 開啟影像，銷毀時命令 Python 關閉影像以釋放效能！
 /// </summary>
 public class OAKVideoStream : MonoBehaviour
 {
@@ -32,7 +34,7 @@ public class OAKVideoStream : MonoBehaviour
     {
         targetDisplay = GetComponent<RawImage>();
 
-        // 🌟 核心修改：向全域大腦確認目前的模式
+        // 向全域大腦確認目前的模式
         bool isCameraMode = true;
         if (OAKInputReceiver.Instance != null)
         {
@@ -45,7 +47,6 @@ public class OAKVideoStream : MonoBehaviour
             Debug.Log("🖱️ [OAK Video] 目前為滑鼠測試模式，鏡子畫面已自動休眠。");
             if (targetDisplay != null)
             {
-                // 將鏡子畫面變成深灰色，讓玩家知道現在沒有相機畫面
                 targetDisplay.color = new Color(0.2f, 0.2f, 0.2f, 1f);
             }
             this.enabled = false; // 徹底關閉 Update，節省遊戲效能
@@ -54,6 +55,9 @@ public class OAKVideoStream : MonoBehaviour
 
         // 📷 以下為相機模式專屬啟動流程：
         
+        // 🌟 核心功能：告訴 Python 我們現在需要影像了（開啟照鏡子關卡）
+        SendCommandToPython("VIDEO_ON");
+
         // 建立一張初始貼圖
         tex = new Texture2D(640, 360, TextureFormat.RGB24, false);
         if (targetDisplay != null)
@@ -122,8 +126,31 @@ public class OAKVideoStream : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 🌟 新增：發送 UDP 控制指令給 Python (Port 5004)
+    /// </summary>
+    private void SendCommandToPython(string command)
+    {
+        try
+        {
+            using (UdpClient client = new UdpClient())
+            {
+                byte[] data = Encoding.UTF8.GetBytes(command);
+                client.Send(data, data.Length, "127.0.0.1", 5004);
+                Debug.Log($"[OAK Video] 已成功發送遠端指令至 Python: {command}");
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[OAK Video] 無法發送指令給 Python: {e.Message}");
+        }
+    }
+
     void OnDestroy()
     {
+        // 🌟 核心功能：當鏡子被銷毀（換到水果關卡），立刻命令 Python 關閉影像壓縮！
+        SendCommandToPython("VIDEO_OFF");
+
         try
         {
             if (receiveThread != null && receiveThread.IsAlive)
