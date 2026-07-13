@@ -5,14 +5,32 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Assets/Scenes/SampleScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
-    path: Assets/Assets/Scenes/01_Login.unity
+    path: Assets/Project/Scripts/Scenes/01_Login.unity
     guid: cd90b1a94ee3a80448f92422a2894363
   - enabled: 1
-    path: Assets/Assets/Scenes/02_OpeningStory.unity
+    path: Assets/Project/Scripts/Scenes/02_OpeningStory.unity
     guid: a6240a93f98d35c488ea49f033789d66
+  - enabled: 1
+    path: Assets/Project/Scripts/Scenes/Controller_Palm.unity
+    guid: 42f31b91e445dde4c95ffab3e4f50786
+  - enabled: 1
+    path: Assets/Project/Scripts/Scenes/StoryIntroScene.unity
+    guid: 869c873c57884d5592480986b4c2da40
+  - enabled: 1
+    path: Assets/Project/Scripts/Scenes/WaitStartScene.unity
+    guid: 74aca9706cc43514ca40c4882a68c5d0
+  - enabled: 1
+    path: Assets/Project/Scripts/Scenes/CoreGameScene.unity
+    guid: f2f9d34d5ce34374eb0fbf1566b54e7a
+  - enabled: 1
+    path: Assets/Project/Scripts/Scenes/CountdownScene.unity
+    guid: c0fdfddcc2bb9cd45a14f4ae490d53e8
+  - enabled: 1
+    path: Assets/Project/Scripts/Scenes/Store_1/Construction.unity
+    guid: 14fef557dffbbe64c8617f142b44f0f2
+  - enabled: 1
+    path: Assets/Project/Scripts/Scenes/StampCheckScene.unity
+    guid: dfcd8b7b977f497399c0a73c84174043
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
